@@ -102,7 +102,7 @@ To load this library,
 
 new
 ---
-`syntax: local hmac_sha256 = hmac.new(key [, hash_algorithm])`
+`syntax: local hmac_sha256 = hmac:new(key [, hash_algorithm])`
 
 Creates a new hmac instance. If failed, returns `nil`.
 
