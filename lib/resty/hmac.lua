@@ -73,6 +73,18 @@ const EVP_MD *EVP_sha256(void);
 const EVP_MD *EVP_sha512(void);
 ]]
 
+-- API shims to accomodate different platforms
+local is_osx = (ffi.os == 'OSX')
+local function HMAC_Update(ctx, s, slen)
+    local res = C.HMAC_Update(ctx, s, slen)
+    return is_osx or (res == 1)
+end
+local function HMAC_Final(ctx, buf, res_len)
+    local res = C.HMAC_Final(ctx, buf, res_len)
+    return is_osx or (res == 1)
+end
+
+
 local buf = ffi_new("unsigned char[64]")
 local res_len = ffi_new("unsigned int[1]")
 local ctx_ptr_type = ffi.typeof("HMAC_CTX[1]")
@@ -105,19 +117,18 @@ end
 
 
 function _M.update(self, s)
-    return C.HMAC_Update(self._ctx, s, #s) == 1
+    return HMAC_Update(self._ctx, s, #s)
 end
 
 
 function _M.final(self, s, hex_output)
-
     if s ~= nil then
-        if C.HMAC_Update(self._ctx, s, #s) == 0 then
+        if not HMAC_Update(self._ctx, s, #s) then
             return nil
         end
     end
 
-    if C.HMAC_Final(self._ctx, buf, res_len) == 1 then
+    if HMAC_Final(self._ctx, buf, res_len) then
         if hex_output == true then
             return str_util.to_hex(ffi_str(buf, res_len[0]))
         end
