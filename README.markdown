@@ -31,6 +31,16 @@ Description
 This library requires an nginx build with OpenSSL,
 the [ngx_lua module](http://wiki.nginx.org/HttpLuaModule), and [LuaJIT 2.0](http://luajit.org/luajit.html).
 
+On 2017-12-07, I (Adam Cecile) added OpenSSL 1.1 support that brings Debian Stretch out of the box experience.
+Sadly there's no way to determine OpenSSL through FFI C-bindings so I had to use an environment variable to trigger legacy code.
+
+In top nginx configuration file add
+```
+env HMAC_USE_LEGACY_OPENSSL_API=1;
+```
+Otherwise it will use OpenSSL 1.1 calls.
+
+
 Synopsis
 ========
 
