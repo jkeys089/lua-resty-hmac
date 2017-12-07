@@ -8,6 +8,17 @@ local C = ffi.C
 local setmetatable = setmetatable
 local error = error
 
+-- There's no way to detect pr OpenSSL 1.1 using ffi
+-- So here's an environment variable to enable legacy code
+local use_legacy_openssl_api = os.getenv("HMAC_USE_LEGACY_OPENSSL_API")
+if use_legacy_openssl_api ~= nil then
+    use_legacy_openssl_api = string.lower(use_legacy_openssl_api)
+end
+if (use_legacy_openssl_api == "1" or use_legacy_openssl_api == "true" or use_legacy_openssl_api == "yes")then
+    use_legacy_openssl_api = true
+else
+    use_legacy_openssl_api = false
+end
 
 local _M = { _VERSION = '0.01' }
 
@@ -60,8 +71,19 @@ typedef struct hmac_ctx_st
     unsigned char key[128];
     } HMAC_CTX;
 
+// Open SSL 1.0
+// https://www.openssl.org/docs/man1.0.2/crypto/HMAC.html
 void HMAC_CTX_init(HMAC_CTX *ctx);
 void HMAC_CTX_cleanup(HMAC_CTX *ctx);
+
+// Open SSL 1.1
+// https://www.openssl.org/docs/man1.1.0/crypto/HMAC.html
+HMAC_CTX *HMAC_CTX_new(void);
+void HMAC_CTX_free(HMAC_CTX *ctx);
+// Could be used to check dynamically which version I'm running on
+// but OpenSSL 1.0 does not have this method, only defines that cannot
+// be retreived by ffi, so we're fucked.
+//int OpenSSL_version_num(void);
 
 int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int len,const EVP_MD *md, ENGINE *impl);
 int HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, size_t len);
@@ -88,9 +110,19 @@ _M.ALGOS = hashes
 
 
 function _M.new(self, key, hash_algo)
-    local ctx = ffi_new(ctx_ptr_type)
 
-    C.HMAC_CTX_init(ctx)
+    -- Once nobody uses anymore OpenSSL 1.0
+    -- This can be used to make conditionnal code
+    -- local openssl_version = C.OpenSSL_version_num()
+
+    local ctx
+
+    if use_legacy_openssl_api == true then
+        ctx = ffi_new(ctx_ptr_type)
+        C.HMAC_CTX_init(ctx)
+    else
+        ctx = C.HMAC_CTX_new()
+    end
 
     local _hash_algo = hash_algo or hashes.md5
 
@@ -98,7 +130,11 @@ function _M.new(self, key, hash_algo)
         return nil
     end
 
-    ffi_gc(ctx, C.HMAC_CTX_cleanup)
+    if use_legacy_openssl_api == true then
+        ffi_gc(ctx, C.HMAC_CTX_cleanup)
+    else
+        ffi_gc(ctx, C.HMAC_CTX_free)
+    end
 
     return setmetatable({ _ctx = ctx }, mt)
 end
