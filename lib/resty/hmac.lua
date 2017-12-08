@@ -69,7 +69,6 @@ void HMAC_CTX_cleanup(HMAC_CTX *ctx);
 //OpenSSL 1.1
 HMAC_CTX *HMAC_CTX_new(void);
 void HMAC_CTX_free(HMAC_CTX *ctx);
-int HMAC_CTX_reset(HMAC_CTX *ctx);
 
 int HMAC_Init_ex(HMAC_CTX *ctx, const void *key, int len, const EVP_MD *md, ENGINE *impl);
 int HMAC_Update(HMAC_CTX *ctx, const unsigned char *data, size_t len);

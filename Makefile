@@ -1,9 +1,9 @@
-PREFIX 		?= /usr/local/openresty
+PREFIX		?= /usr/local/openresty
 LUA_LIB_DIR	?= $(PREFIX)/lualib
-INSTALL 	?= install
-VALGRIND 	?= 0
+INSTALL		?= install
+VALGRIND	?= 0
 CHECK_LEAK	?= 0
-MODULES 	?=
+MODULES		?=
 
 .PHONY: all test install
 
