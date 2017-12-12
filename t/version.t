@@ -7,12 +7,6 @@ repeat_each(2);
 
 plan tests => repeat_each() * (3 * blocks());
 
-my $pwd = cwd();
-
-our $HttpConfig = qq{
-    lua_package_path "$pwd/lib/?.lua;;";
-};
-
 $ENV{TEST_NGINX_RESOLVER} = '8.8.8.8';
 
 no_long_string();
