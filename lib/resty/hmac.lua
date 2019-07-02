@@ -11,7 +11,7 @@ local setmetatable = setmetatable
 local error = error
 
 
-local _M = { _VERSION = '0.02' }
+local _M = { _VERSION = '0.03' }
 
 local mt = { __index = _M }
 
@@ -120,7 +120,7 @@ _M.ALGOS = hashes
 function _M.new(self, key, hash_algo)
     local ctx = ctx_new()
 
-    local _hash_algo = hash_algo or hashes.md5
+    local _hash_algo = hash_algo or hashes.MD5
 
     if C.HMAC_Init_ex(ctx, key, #key, _hash_algo, nil) == 0 then
         return nil

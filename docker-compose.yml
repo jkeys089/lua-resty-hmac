@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  lua-resty-hmac:
+    build:
+      context: .
+    volumes:
+      - ".:/app"
+    image: lua-resty-hmac:latest
+    command: make test

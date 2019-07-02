@@ -227,3 +227,26 @@ true
 hmac-md5: 80f9a1bc99575c2430fe04c982cf5700
 --- no_error_log
 [error]
+
+
+
+=== TEST 10: Hello HMAC-MD5 Default
+--- http_config eval: $::HttpConfig
+--- config
+    location /t {
+        content_by_lua '
+            local hmac = require "resty.hmac"
+            local str = require "resty.string"
+            local hmac_default = hmac:new("reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeely long key")
+            ngx.say(hmac_default:update("hmac ftw!!!"))
+            local mac = hmac_default:final()
+            ngx.say("hmac-default: ", str.to_hex(mac))
+        ';
+    }
+--- request
+GET /t
+--- response_body
+true
+hmac-default: 80f9a1bc99575c2430fe04c982cf5700
+--- no_error_log
+[error]
