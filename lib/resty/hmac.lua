@@ -19,10 +19,10 @@ local mt = { __index = _M }
 ffi.cdef[[
 typedef struct engine_st ENGINE;
 typedef struct evp_pkey_ctx_st EVP_PKEY_CTX;
-typedef struct env_md_ctx_st EVP_MD_CTX;
-typedef struct env_md_st EVP_MD;
+typedef struct evp_md_ctx_st EVP_MD_CTX;
+typedef struct evp_md_st EVP_MD;
 
-struct env_md_ctx_st
+struct evp_md_ctx_st
     {
     const EVP_MD *digest;
     ENGINE *engine;
@@ -32,7 +32,7 @@ struct env_md_ctx_st
     int (*update)(EVP_MD_CTX *ctx,const void *data,size_t count);
     };
 
-struct env_md_st
+struct evp_md_st
     {
     int type;
     int pkey_type;
