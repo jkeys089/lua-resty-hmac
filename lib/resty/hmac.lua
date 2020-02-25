@@ -19,48 +19,9 @@ local mt = { __index = _M }
 ffi.cdef[[
 typedef struct engine_st ENGINE;
 typedef struct evp_pkey_ctx_st EVP_PKEY_CTX;
-typedef struct env_md_ctx_st EVP_MD_CTX;
-typedef struct env_md_st EVP_MD;
-
-struct env_md_ctx_st
-    {
-    const EVP_MD *digest;
-    ENGINE *engine;
-    unsigned long flags;
-    void *md_data;
-    EVP_PKEY_CTX *pctx;
-    int (*update)(EVP_MD_CTX *ctx,const void *data,size_t count);
-    };
-
-struct env_md_st
-    {
-    int type;
-    int pkey_type;
-    int md_size;
-    unsigned long flags;
-    int (*init)(EVP_MD_CTX *ctx);
-    int (*update)(EVP_MD_CTX *ctx,const void *data,size_t count);
-    int (*final)(EVP_MD_CTX *ctx,unsigned char *md);
-    int (*copy)(EVP_MD_CTX *to,const EVP_MD_CTX *from);
-    int (*cleanup)(EVP_MD_CTX *ctx);
-
-    int (*sign)(int type, const unsigned char *m, unsigned int m_length, unsigned char *sigret, unsigned int *siglen, void *key);
-    int (*verify)(int type, const unsigned char *m, unsigned int m_length, const unsigned char *sigbuf, unsigned int siglen, void *key);
-    int required_pkey_type[5];
-    int block_size;
-    int ctx_size;
-    int (*md_ctrl)(EVP_MD_CTX *ctx, int cmd, int p1, void *p2);
-    };
-
-typedef struct hmac_ctx_st
-    {
-    const EVP_MD *md;
-    EVP_MD_CTX md_ctx;
-    EVP_MD_CTX i_ctx;
-    EVP_MD_CTX o_ctx;
-    unsigned int key_length;
-    unsigned char key[128];
-    } HMAC_CTX;
+typedef struct evp_md_ctx_st EVP_MD_CTX;
+typedef struct evp_md_st EVP_MD;
+typedef struct hmac_ctx_st HMAC_CTX;
 
 //OpenSSL 1.0
 void HMAC_CTX_init(HMAC_CTX *ctx);
@@ -82,7 +43,6 @@ const EVP_MD *EVP_sha512(void);
 
 local buf = ffi_new("unsigned char[64]")
 local res_len = ffi_new("unsigned int[1]")
-local ctx_ptr_type = ffi_typeof("HMAC_CTX[1]")
 local hashes = {
     MD5 = C.EVP_md5(),
     SHA1 = C.EVP_sha1(),
@@ -103,6 +63,50 @@ if openssl11 then
         C.HMAC_CTX_free(ctx)
     end
 else
+    ffi.cdef [[
+    struct evp_md_ctx_st
+    {
+        const EVP_MD *digest;
+        ENGINE *engine;
+        unsigned long flags;
+        void *md_data;
+        EVP_PKEY_CTX *pctx;
+        int (*update)(EVP_MD_CTX *ctx,const void *data,size_t count);
+    };
+
+    struct evp_md_st
+    {
+        int type;
+        int pkey_type;
+        int md_size;
+        unsigned long flags;
+        int (*init)(EVP_MD_CTX *ctx);
+        int (*update)(EVP_MD_CTX *ctx,const void *data,size_t count);
+        int (*final)(EVP_MD_CTX *ctx,unsigned char *md);
+        int (*copy)(EVP_MD_CTX *to,const EVP_MD_CTX *from);
+        int (*cleanup)(EVP_MD_CTX *ctx);
+
+        int (*sign)(int type, const unsigned char *m, unsigned int m_length, unsigned char *sigret, unsigned int *siglen, void *key);
+        int (*verify)(int type, const unsigned char *m, unsigned int m_length, const unsigned char *sigbuf, unsigned int siglen, void *key);
+        int required_pkey_type[5];
+        int block_size;
+        int ctx_size;
+        int (*md_ctrl)(EVP_MD_CTX *ctx, int cmd, int p1, void *p2);
+        };
+
+    struct hmac_ctx_st
+    {
+        const EVP_MD *md;
+        EVP_MD_CTX md_ctx;
+        EVP_MD_CTX i_ctx;
+        EVP_MD_CTX o_ctx;
+        unsigned int key_length;
+        unsigned char key[128];
+    };
+    ]]
+
+    local ctx_ptr_type = ffi_typeof("HMAC_CTX[1]")
+
     ctx_new = function ()
         local ctx = ffi_new(ctx_ptr_type)
         C.HMAC_CTX_init(ctx)
