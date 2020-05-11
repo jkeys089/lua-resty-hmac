@@ -11,7 +11,7 @@ local setmetatable = setmetatable
 local error = error
 
 
-local _M = { _VERSION = '0.04' }
+local _M = { _VERSION = '0.05' }
 
 local mt = { __index = _M }
 
