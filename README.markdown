@@ -109,8 +109,8 @@ Creates a new hmac instance. If failed, returns `nil`.
 The `key` argument specifies the key to use when calculating the message authentication code (MAC).
 `key` is a lua string which may contain printable characters or binary data.
 
-The `hash_algorithm` argument specifies which hashing algorithm to use (`hash.ALGOS.MD5`, `hash.ALGOS.SHA1`, `hash.ALGOS.SHA256`, `hash.ALGOS.SHA512`).
-The default value is `hash.ALGOS.MD5`.
+The `hash_algorithm` argument specifies which hashing algorithm to use (`hmac.ALGOS.MD5`, `hmac.ALGOS.SHA1`, `hmac.ALGOS.SHA256`, `hmac.ALGOS.SHA512`).
+The default value is `hmac.ALGOS.MD5`.
 
 [Back to TOC](#table-of-contents)
 
