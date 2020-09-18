@@ -1,4 +1,4 @@
-package = 'lua-resty-jwt'
+package = 'lua-resty-hmac'
 version = '1.0-0'
 
 source = {
