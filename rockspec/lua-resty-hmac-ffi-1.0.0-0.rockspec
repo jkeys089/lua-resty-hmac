@@ -1,4 +1,4 @@
-package = 'lua-resty-hmac'
+package = 'lua-resty-hmac-ffi'
 version = '1.0-0'
 
 source = {
@@ -13,7 +13,7 @@ description = {
 }
 
 dependencies = {
-  'lua >= 5.1'
+  'lua == 5.1'
 }
 
 build = {
