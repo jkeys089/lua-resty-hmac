@@ -8,7 +8,6 @@ local ffi_gc = ffi.gc
 local ffi_typeof = ffi.typeof
 local C = ffi.C
 local setmetatable = setmetatable
-local error = error
 
 
 local _M = { _VERSION = '0.05' }
@@ -101,7 +100,7 @@ else
         C.HMAC_CTX_init(ctx)
         return ctx
     end
-    ctx_free = function (ctx) 
+    ctx_free = function (ctx)
         C.HMAC_CTX_cleanup(ctx)
     end
 end
@@ -169,5 +168,6 @@ end
 function _M.reset(self)
     return C.HMAC_Init_ex(self._ctx, nil, 0, nil, nil) == 1
 end
+
 
 return _M
