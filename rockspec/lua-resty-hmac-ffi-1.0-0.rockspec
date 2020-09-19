@@ -7,7 +7,7 @@ source = {
 }
 
 description = {
-  summary = 'Lua driver for making and receiving hmac signed requests',
+  summary = 'HMAC functions for ngx_lua and LuaJIT',
   homepage = 'https://github.com/jkeys089/lua-resty-hmac',
   license = 'BSD-2-Clause License'
 }
