@@ -113,6 +113,7 @@ int HMAC_Final(HMAC_CTX *ctx, unsigned char *md, unsigned int *len);
 const EVP_MD *EVP_md5(void);
 const EVP_MD *EVP_sha1(void);
 const EVP_MD *EVP_sha256(void);
+const EVP_MD *EVP_sha384(void);
 const EVP_MD *EVP_sha512(void);
 ]]
 
@@ -120,6 +121,7 @@ local hashes = {
     MD5 = C.EVP_md5(),
     SHA1 = C.EVP_sha1(),
     SHA256 = C.EVP_sha256(),
+    SHA384 = C.EVP_sha384(),
     SHA512 = C.EVP_sha512()
 }
 
