@@ -192,7 +192,7 @@ Copyright and License
 
 This module is licensed under the BSD license.
 
-Copyright (C) 2012-2020, Thought Foundry Inc.
+Copyright (C) 2012-2021, Thought Foundry Inc.
 
 All rights reserved.
 
