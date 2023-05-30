@@ -1,5 +1,8 @@
-name: LuaRocks release
-on: [push]
+name: LuaRocks publish
+on:
+  push:
+    tags:
+      - "*"
 
 jobs:
   luarocks-release:
@@ -18,7 +21,7 @@ jobs:
       run: |
         luarocks install lua-cjson
         luarocks install luasec
-        luarocks --verbose upload rockspec/lua-resty-hmac-tag-release-test-0.05-0.rockspec --force --api-key=$LUAROCKS_API_KEY
+        luarocks --verbose upload rockspec/lua-resty-hmac-tag-release-test-${{ github.event.release.tag_name }}.rockspec --force --api-key=$LUAROCKS_API_KEY
       env:
         LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
           
