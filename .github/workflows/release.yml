@@ -1,19 +1,23 @@
 name: LuaRocks release
-on:
-  push:
-    tags:
-      - "*"
+on: [push]
 
 jobs:
   luarocks-release:
     runs-on: ubuntu-latest
     name: LuaRocks upload
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: LuaRocks Upload
-        uses: nvim-neorocks/luarocks-tag-release@v4
-        with:
-          license: "BSD-2-Clause"
-        env:
-          LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+    - uses: actions/checkout@master
+
+    - uses: leafo/gh-actions-lua@v10
+      with:
+        luaVersion: "5.1.5"
+
+    - uses: leafo/gh-actions-luarocks@v4
+
+    - name: build
+      run: |
+        luarocks pack rockspec/lua-resty-hmac-tag-release-test-0.05-0.rockspec
+        luarocks upload lua-resty-hmac-tag-release-test-0.05-0.src.rock --api-key=$LUAROCKS_API_KEY
+      env:
+        LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
+          
