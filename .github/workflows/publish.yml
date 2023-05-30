@@ -21,7 +21,6 @@ jobs:
       run: |
         luarocks install lua-cjson
         luarocks install luasec
-        luarocks --verbose upload rockspec/lua-resty-hmac-tag-release-test-${{ github.ref_name }}.rockspec --force --api-key=$LUAROCKS_API_KEY
+        luarocks upload rockspec/lua-resty-hmac-ffi-${{ github.ref_name }}.rockspec --api-key=$LUAROCKS_API_KEY
       env:
         LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
-          
