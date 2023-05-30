@@ -16,8 +16,7 @@ jobs:
 
     - name: build
       run: |
-        luarocks pack rockspec/lua-resty-hmac-tag-release-test-0.05-0.rockspec
-        luarocks upload lua-resty-hmac-tag-release-test-0.05-0.src.rock --api-key=$LUAROCKS_API_KEY
+        luarocks upload rockspec/lua-resty-hmac-tag-release-test-0.05-0.rockspec --api-key=$LUAROCKS_API_KEY
       env:
         LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
           
