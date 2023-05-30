@@ -1,9 +1,9 @@
 package = 'lua-resty-hmac-tag-release-test'
-version = '0.06-0'
+version = '0.05-0'
 
 source = {
   url = 'git://github.com/excitedturbofan38/lua-resty-hmac',
-  tag = 'v0.06'
+  tag = '0.0.2'
 }
 
 description = {
