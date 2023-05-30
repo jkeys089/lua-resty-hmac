@@ -15,7 +15,7 @@ jobs:
     - uses: leafo/gh-actions-luarocks@v4
 
     - name: publish
-      run:
+      run: |
         luarocks install lua-cjson
         luarocks upload rockspec/lua-resty-hmac-tag-release-test-0.05-0.rockspec --api-key=$LUAROCKS_API_KEY
       env:
