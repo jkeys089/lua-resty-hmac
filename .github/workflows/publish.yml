@@ -1,0 +1,26 @@
+name: LuaRocks publish
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  luarocks-release:
+    runs-on: ubuntu-latest
+    name: LuaRocks upload
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: leafo/gh-actions-lua@v10
+      with:
+        luaVersion: "5.1.5"
+
+    - uses: leafo/gh-actions-luarocks@v4
+
+    - name: publish
+      run: |
+        luarocks install lua-cjson
+        luarocks install luasec
+        luarocks upload rockspec/lua-resty-hmac-ffi-${{ github.ref_name }}.rockspec --api-key=$LUAROCKS_API_KEY
+      env:
+        LUAROCKS_API_KEY: ${{ secrets.LUAROCKS_API_KEY }}
