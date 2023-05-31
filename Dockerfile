@@ -1,4 +1,4 @@
-FROM openresty/openresty:stretch-fat
+FROM openresty/openresty:bullseye-fat
 
 WORKDIR /app
 
